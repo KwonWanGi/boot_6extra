@@ -31,11 +31,12 @@ public class GalleryServieImpl implements GalleryService{
 	@Override
 	public int save(Gallery dto) {		//controller에서 넘어온 파라미터 값들로 insert + 파일업로드
 		String path ="D:\\iclass1020\\upload";
+		StringBuilder filenames = new StringBuilder(); 	//테이블 컬럼으로 전달될 파일명들(,로 구분)
 		//파일업로드
 		for(MultipartFile f:dto.getPics()) {
 			if(f.getSize()!=0) {	//getSize()는 첨부파일의 크기
 				String ofilename = f.getOriginalFilename();		//원래의 파일명 (파일이름.확장자)
-				String prefix = ofilename.substring(0, ofilename.lastIndexOf("."));   //파일이름
+//				String prefix = ofilename.substring(0, ofilename.lastIndexOf("."));   //파일이름
 				String postfix = ofilename.substring(ofilename.lastIndexOf("."));	 //확장자
 				StringBuilder newfile = new StringBuilder("gallery_")
 				//		.append(prefix)		//원래의 파일이름
@@ -45,10 +46,12 @@ public class GalleryServieImpl implements GalleryService{
 				//저장
 				try {
 					f.transferTo(file);
+					filenames.append(newfile).append(",");  //db 테이블에 들어갈 파일명
 				} catch (IOException e) {	}
 			}	
 		}	
-		return 0;
+		dto.setFilenames(filenames.toString());
+		return dao.save(dto);
 	}
 
 	@Override
