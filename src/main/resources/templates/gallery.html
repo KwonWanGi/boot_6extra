@@ -9,6 +9,7 @@
 <h3>파일업로드 테스트</h3>
 <hr>
 <form action="gallery" method="post" enctype="multipart/form-data">
+	<input type="text" th:value="${session.id}" name="writer" readonly>
 	<input type="text" placeholder="제목" name="title"><br>
 	이미지 파일은 최대 3개로 첨부합니다.<br>
 	<input type="file" name="pics" accept="image/*"><br>
